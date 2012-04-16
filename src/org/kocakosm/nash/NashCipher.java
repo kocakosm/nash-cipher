@@ -100,7 +100,7 @@ public final class NashCipher
 		if (mode == Mode.DECRYPTION) {
 			return decrypt(bytes, off, len);
 		}
-		return null;
+		throw new IllegalStateException();
 	}
 
 	private byte[] encrypt(byte[] bytes, int off, int len)

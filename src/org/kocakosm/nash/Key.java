@@ -142,17 +142,17 @@ public final class Key implements Serializable
 
 	private static int[] generatePermutations()
 	{
-		List<Integer> l = new ArrayList<Integer>();
-		l.add(Integer.valueOf(0));
-		for (int i = 0; i < SIZE; i++) {
-			l.add(Integer.valueOf(i));
+		List<Integer> values = new ArrayList<Integer>();
+		values.add(Integer.valueOf(0));
+		for (int i = 0; i < SIZE - 1; i++) {
+			values.add(Integer.valueOf(i));
 		}
-		Collections.shuffle(l, PRNG);
-		int[] values = new int[SIZE];
+		Collections.shuffle(values, PRNG);
+		int[] permutations = new int[SIZE];
 		for (int i = 0; i < SIZE; i++) {
-			values[i] = l.get(i).intValue();
+			permutations[i] = values.get(i).intValue();
 		}
-		return values;
+		return permutations;
 	}
 
 	private static boolean[] generateBits()
