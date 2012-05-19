@@ -37,9 +37,14 @@ public final class Key implements Serializable
 	 * @param size the size of the key (actually, the permuter's size).
 	 *
 	 * @return the created secret key.
+	 *
+	 * @throws IllegalArgumentException if {@code size <= 0}.
 	 */
 	public static Key create(int size)
 	{
+		if (size <= 0) {
+			throw new IllegalArgumentException();
+		}
 		return new Key(size);
 	}
 
