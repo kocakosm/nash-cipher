@@ -6,7 +6,7 @@
   <artifactId>nash-cipher</artifactId>
   <packaging>jar</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>nash-cipher</name>
+  <name>Nash-Cipher</name>
   <inceptionYear>2012</inceptionYear>
 
   <licenses>

@@ -42,7 +42,7 @@ public final class NashCipherStreamsTest
 		byte[] data = new byte[rnd.nextInt(4096)];
 		rnd.nextBytes(data);
 
-		Key secret = Key.create();
+		Key secret = Key.create(64);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		OutputStream out = new NashCipherOutputStream(secret, baos);

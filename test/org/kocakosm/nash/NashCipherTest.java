@@ -16,9 +16,7 @@
 
 package org.kocakosm.nash;
 
-import static org.junit.Assert.*;
-
-import org.kocakosm.nash.NashCipher.Mode;
+import static org.junit.Assert.assertArrayEquals;
 
 import java.util.Random;
 
@@ -34,9 +32,9 @@ public final class NashCipherTest
 	@Test
 	public void test()
 	{
-		Key key = Key.create();
-		NashCipher enc = new NashCipher(key, Mode.ENCRYPTION);
-		NashCipher dec = new NashCipher(key, Mode.DECRYPTION);
+		Key k = Key.create(64);
+		NashCipher enc = new NashCipher(k, NashCipher.Mode.ENCRYPTION);
+		NashCipher dec = new NashCipher(k, NashCipher.Mode.DECRYPTION);
 
 		Random rnd = new Random();
 		byte[] data1 = new byte[rnd.nextInt(4096)];

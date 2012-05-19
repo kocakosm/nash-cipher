@@ -18,10 +18,7 @@ package org.kocakosm.nash;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -33,17 +30,17 @@ public final class Key implements Serializable
 {
 	private static final long serialVersionUID = 84530924754951016L;
 	private static final Random PRNG = new SecureRandom();
-	private static final int SIZE = 32;
 
 	/**
 	 * Creates a new random key.
 	 *
+	 * @param size the size of the key (actually, the permuter's size).
+	 *
 	 * @return the created secret key.
 	 */
-	public static Key create()
+	public static Key create(int size)
 	{
-		return new Key(generatePermutations(), generateBits(),
-			generatePermutations(), generateBits(), generateBits());
+		return new Key(size);
 	}
 
 	private final boolean[] redBits;
@@ -52,15 +49,13 @@ public final class Key implements Serializable
 	private final int[] bluePermutations;
 	private final boolean[] initialState;
 
-	private Key(int[] redPermutations, boolean[] redBits, 
-		int[] bluePermutations, boolean[] blueBits,
-		boolean[] initialState)
+	private Key(int size)
 	{
-		this.redPermutations = redPermutations;
-		this.redBits = redBits;
-		this.bluePermutations = bluePermutations;
-		this.blueBits = blueBits;
-		this.initialState = initialState;
+		this.redBits = generateBits(size);
+		this.blueBits = generateBits(size);
+		this.redPermutations = generatePermutations(size);
+		this.bluePermutations = generatePermutations(size);
+		this.initialState = generateBits(size);
 	}
 
 	/**
@@ -140,27 +135,37 @@ public final class Key implements Serializable
 		return hash;
 	}
 
-	private static int[] generatePermutations()
+	private boolean[] generateBits(int size)
 	{
-		List<Integer> values = new ArrayList<Integer>();
-		values.add(Integer.valueOf(0));
-		for (int i = 0; i < SIZE - 1; i++) {
-			values.add(Integer.valueOf(i));
-		}
-		Collections.shuffle(values, PRNG);
-		int[] permutations = new int[SIZE];
-		for (int i = 0; i < SIZE; i++) {
-			permutations[i] = values.get(i).intValue();
-		}
-		return permutations;
-	}
-
-	private static boolean[] generateBits()
-	{
-		boolean[] bits = new boolean[SIZE];
-		for (int i = 0; i < SIZE; i++) {
+		boolean[] bits = new boolean[size];
+		for (int i = 0; i < size; i++) {
 			bits[i] = PRNG.nextBoolean();
 		}
 		return bits;
+	}
+
+	private int[] generatePermutations(int size)
+	{
+		int[] values = new int[size];
+		for (int i = 0; i < size - 1; i++) {
+			values[i] = i;
+		}
+		values[size - 1] = 0;
+		return shuffle(values);
+	}
+
+	private int[] shuffle(int... values)
+	{
+		for (int i = values.length; i > 1; i--) {
+			swap(values, i - 1, PRNG.nextInt(i));
+		}
+		return values;
+	}
+
+	private void swap(int[] array, int i, int j)
+	{
+		int v = array[i];
+		array[i] = array[j];
+		array[j] = v;
 	}
 }

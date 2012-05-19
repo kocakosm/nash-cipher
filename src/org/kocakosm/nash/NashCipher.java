@@ -97,20 +97,16 @@ public final class NashCipher
 		if (mode == Mode.ENCRYPTION) {
 			return encrypt(bytes, off, len);
 		}
-		if (mode == Mode.DECRYPTION) {
-			return decrypt(bytes, off, len);
-		}
-		throw new IllegalStateException();
+		return decrypt(bytes, off, len);
 	}
 
 	private byte[] encrypt(byte[] bytes, int off, int len)
 	{
 		byte[] encrypted = new byte[len];
 		for (int i = off; i < off + len; i++) {
-			byte b = bytes[i];
 			int val = 0;
 			for (int j = 0; j < 8; j++) {
-				boolean in = ((b & 0xFF) & (1 << j)) > 0;
+				boolean in = ((bytes[i] & 0xFF) & (1 << j)) > 0;
 				boolean out = xor(in, state[state.length - 1]);
 				val = (val >>> 1) | (out ? 0x80 : 0);
 				process(out);
@@ -124,10 +120,9 @@ public final class NashCipher
 	{
 		byte[] decrypted = new byte[len];
 		for (int i = off; i < off + len; i++) {
-			byte b = bytes[i];
 			int val = 0;
 			for (int j = 0; j < 8; j++) {
-				boolean in = ((b & 0xFF) & (1 << j)) > 0;
+				boolean in = ((bytes[i] & 0xFF) & (1 << j)) > 0;
 				boolean out = xor(in, state[state.length - 1]);
 				val = (val >>> 1) | (out ? 0x80 : 0);
 				process(in);
@@ -139,16 +134,16 @@ public final class NashCipher
 
 	private void process(boolean bit)
 	{
-		int[] permutations;
 		boolean[] bits;
+		int[] permutations;
 		if (bit) {
-			permutations = key.getRedPermutations();
 			bits = key.getRedBits();
+			permutations = key.getRedPermutations();
 		} else {
-			permutations = key.getBluePermutations();
 			bits = key.getBlueBits();
+			permutations = key.getBluePermutations();
 		}
-		for (int i = 0; i < state.length; i++) {
+		for (int i = 1; i < state.length; i++) {
 			state[i] = xor(state[permutations[i]], bits[i]);
 		}
 		state[0] = bit;
@@ -156,9 +151,6 @@ public final class NashCipher
 
 	private boolean xor(boolean a, boolean b)
 	{
-		if ((a && !b) || (!a && b)) {
-			return true;
-		}
-		return false;
+		return a ? !b : b;
 	}
 }
