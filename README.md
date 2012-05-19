@@ -1,5 +1,11 @@
+Nash-Cipher
+===========
+
+[![Build Status](https://secure.travis-ci.org/kocakosm/nash-cipher.png?branch=master)](http://travis-ci.org/kocakosm/nash-cipher)
+
+
 Overview
-========
+--------
 
 Nash-Cipher is a "toy" implementation of the cipher described by
 [John Nash](http://en.wikipedia.org/wiki/John_Forbes_Nash,_Jr.) in his
@@ -10,7 +16,7 @@ If you are interested in cryptography, you should definitely read these letters.
 
 
 License
-=======
+-------
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free
@@ -22,5 +28,6 @@ PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 
 Contact
-=======
+-------
+
 For any question, feel free to contact me at kocakosm[@]gmail.com
