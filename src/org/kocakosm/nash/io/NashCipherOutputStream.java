@@ -26,7 +26,7 @@ import java.io.OutputStream;
 /**
  * A {@code NashCipherOutputStream} is composed of an inner {@link OutputStream}
  * and a {@link NashCipher} so that the data written to it are first encrypted
- * before being actually written to the underlying stream.
+ * before being actually written to the inner stream.
  *
  * @author Osman KOCAK
  */
@@ -40,10 +40,15 @@ public final class NashCipherOutputStream extends OutputStream
 	 * Creates a new {@code NashCipherOutputStream}.
 	 *
 	 * @param key the cipher's secret key.
-	 * @param encrypted the underlying stream.
+	 * @param encrypted the underlying encrypted stream.
+	 *
+	 * @throws NullPointerException if one of the arguments is {@code null}.
 	 */
 	public NashCipherOutputStream(Key key, OutputStream encrypted)
 	{
+		if (encrypted == null) {
+			throw new NullPointerException();
+		}
 		this.cipher = new NashCipher(key, NashCipher.Mode.ENCRYPTION);
 		this.encrypted = new BufferedOutputStream(encrypted);
 	}
@@ -75,9 +80,7 @@ public final class NashCipherOutputStream extends OutputStream
 	@Override
 	public void write(byte[] b) throws IOException
 	{
-		synchronized (lock) {
-			encrypted.write(cipher.process(b));
-		}
+		write(b, 0, b.length);
 	}
 
 	@Override

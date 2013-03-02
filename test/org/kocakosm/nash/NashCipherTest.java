@@ -29,18 +29,17 @@ import org.junit.Test;
  */
 public final class NashCipherTest
 {
+	private static final Random PRNG = new Random();
+
 	@Test
 	public void test()
 	{
 		Key k = Key.create(64);
 		NashCipher enc = new NashCipher(k, NashCipher.Mode.ENCRYPTION);
 		NashCipher dec = new NashCipher(k, NashCipher.Mode.DECRYPTION);
+		byte[] data = new byte[PRNG.nextInt(4096)];
+		PRNG.nextBytes(data);
 
-		Random rnd = new Random();
-		byte[] data1 = new byte[rnd.nextInt(4096)];
-		rnd.nextBytes(data1);
-		byte[] data2 = dec.process(enc.process(data1));
-
-		assertArrayEquals(data1, data2);
+		assertArrayEquals(data, dec.process(enc.process(data)));
 	}
 }

@@ -25,7 +25,7 @@ import java.io.InputStream;
 
 /**
  * A {@code NashCipherInputStream} is composed of an inner {@link InputStream}
- * and a {@link NashCipher} so that the data read from the underlying stream are
+ * and a {@link NashCipher} so that the data read from the inner stream are
  * decrypted before being returned.
  *
  * @author Osman KOCAK
@@ -40,10 +40,15 @@ public final class NashCipherInputStream extends InputStream
 	 * Creates a new {@code NashCipherInputStream}.
 	 *
 	 * @param key the cipher's secret key.
-	 * @param encrypted the underlying stream.
+	 * @param encrypted the underlying encrypted stream.
+	 *
+	 * @throws NullPointerException if one of the arguments is {@code null}.
 	 */
 	public NashCipherInputStream(Key key, InputStream encrypted)
 	{
+		if (encrypted == null) {
+			throw new NullPointerException();
+		}
 		this.cipher = new NashCipher(key, NashCipher.Mode.DECRYPTION);
 		this.encrypted = new BufferedInputStream(encrypted);
 	}
@@ -81,26 +86,14 @@ public final class NashCipherInputStream extends InputStream
 	{
 		synchronized (lock) {
 			int b = encrypted.read();
-			if (b < 0) {
-				return b;
-			}
-			return cipher.process((byte)b)[0] & 0xFF;
+			return b < 0 ? b : cipher.process((byte)b)[0] & 0xFF;
 		}
 	}
 
 	@Override
 	public int read(byte[] b) throws IOException
 	{
-		synchronized (lock) {
-			byte[] buf = new byte[b.length];
-			int len = encrypted.read(buf);
-			if (len < 0) {
-				return len;
-			}
-			byte[] processed = cipher.process(buf, 0, len);
-			System.arraycopy(processed, 0, b, 0, len);
-			return len;
-		}
+		return read(b, 0, b.length);
 	}
 
 	@Override

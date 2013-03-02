@@ -35,13 +35,13 @@ import org.junit.Test;
  */
 public final class NashCipherStreamsTest
 {
+	private static final Random PRNG = new Random();
+
 	@Test
 	public void test() throws Exception
 	{
-		Random rnd = new Random();
-		byte[] data = new byte[rnd.nextInt(4096)];
-		rnd.nextBytes(data);
-
+		byte[] data = new byte[PRNG.nextInt(4096)];
+		PRNG.nextBytes(data);
 		Key secret = Key.create(64);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -51,9 +51,9 @@ public final class NashCipherStreamsTest
 
 		InputStream bais = new ByteArrayInputStream(baos.toByteArray());
 		InputStream in = new NashCipherInputStream(secret, bais);
-		byte[] data2 = new byte[data.length];
-		in.read(data2);
+		byte[] decrypted = new byte[data.length];
+		in.read(decrypted);
 
-		assertArrayEquals(data, data2);
+		assertArrayEquals(data, decrypted);
 	}
 }
