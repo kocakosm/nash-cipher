@@ -12,7 +12,6 @@ Nash-Cipher is a simple implementation of the cipher described by
 letters to the NSA in 1955. These letters have been declassified by the NSA and
 published on their website in January 2012. For more information, please read the
 [press release](http://www.nsa.gov/public_info/press_room/2012/nash_exhibit.shtml).
-If you are interested in cryptography, you should definitely read these letters.
 
 
 License
