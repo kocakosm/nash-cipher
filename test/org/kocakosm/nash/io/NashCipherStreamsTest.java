@@ -18,6 +18,7 @@ package org.kocakosm.nash.io;
 
 import static org.junit.Assert.assertArrayEquals;
 
+import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
 
 import java.io.ByteArrayInputStream;
@@ -42,15 +43,16 @@ public final class NashCipherStreamsTest
 	{
 		byte[] data = new byte[PRNG.nextInt(4096)];
 		PRNG.nextBytes(data);
+		IV iv = IV.create(64);
 		Key secret = Key.create(64);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		OutputStream out = new NashCipherOutputStream(secret, baos);
+		OutputStream out = new NashCipherOutputStream(secret, iv, baos);
 		out.write(data);
 		out.flush();
 
 		InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-		InputStream in = new NashCipherInputStream(secret, bais);
+		InputStream in = new NashCipherInputStream(secret, iv, bais);
 		byte[] decrypted = new byte[data.length];
 		in.read(decrypted);
 

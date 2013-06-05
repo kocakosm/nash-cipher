@@ -16,6 +16,7 @@
 
 package org.kocakosm.nash.io;
 
+import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
 import org.kocakosm.nash.NashCipher;
 
@@ -26,7 +27,8 @@ import java.io.OutputStream;
 /**
  * A {@code NashCipherOutputStream} is composed of an inner {@link OutputStream}
  * and a {@link NashCipher} so that the data written to it are first encrypted
- * before being actually written to the inner stream.
+ * before being actually written to the inner stream. Instances of this class
+ * are thread-safe.
  *
  * @author Osman KOCAK
  */
@@ -40,16 +42,19 @@ public final class NashCipherOutputStream extends OutputStream
 	 * Creates a new {@code NashCipherOutputStream}.
 	 *
 	 * @param key the cipher's secret key.
+	 * @param iv the cipher's initialization vector.
 	 * @param encrypted the underlying encrypted stream.
 	 *
 	 * @throws NullPointerException if one of the arguments is {@code null}.
+	 * @throws IllegalArgumentException if {@code key} and {@code iv} have 
+	 *	different sizes.
 	 */
-	public NashCipherOutputStream(Key key, OutputStream encrypted)
+	public NashCipherOutputStream(Key key, IV iv, OutputStream encrypted)
 	{
 		if (encrypted == null) {
 			throw new NullPointerException();
 		}
-		this.cipher = new NashCipher(key, NashCipher.Mode.ENCRYPTION);
+		this.cipher = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
 		this.encrypted = new BufferedOutputStream(encrypted);
 	}
 

@@ -16,6 +16,7 @@
 
 package org.kocakosm.nash.io;
 
+import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
 import org.kocakosm.nash.NashCipher;
 
@@ -26,7 +27,7 @@ import java.io.InputStream;
 /**
  * A {@code NashCipherInputStream} is composed of an inner {@link InputStream}
  * and a {@link NashCipher} so that the data read from the inner stream are
- * decrypted before being returned.
+ * decrypted before being returned. Instances of this class are thread-safe.
  *
  * @author Osman KOCAK
  */
@@ -40,16 +41,19 @@ public final class NashCipherInputStream extends InputStream
 	 * Creates a new {@code NashCipherInputStream}.
 	 *
 	 * @param key the cipher's secret key.
+	 * @param iv the cipher's initialization vector.
 	 * @param encrypted the underlying encrypted stream.
 	 *
 	 * @throws NullPointerException if one of the arguments is {@code null}.
+	 * @throws IllegalArgumentException if {@code key} and {@code iv} have 
+	 *	different sizes.
 	 */
-	public NashCipherInputStream(Key key, InputStream encrypted)
+	public NashCipherInputStream(Key key, IV iv, InputStream encrypted)
 	{
 		if (encrypted == null) {
 			throw new NullPointerException();
 		}
-		this.cipher = new NashCipher(key, NashCipher.Mode.DECRYPTION);
+		this.cipher = new NashCipher(key, iv, NashCipher.Mode.DECRYPTION);
 		this.encrypted = new BufferedInputStream(encrypted);
 	}
 
@@ -120,8 +124,6 @@ public final class NashCipherInputStream extends InputStream
 	@Override
 	public long skip(long n) throws IOException
 	{
-		synchronized (lock) {
-			return encrypted.skip(n);
-		}
+		throw new IOException("Unseekable stream");
 	}
 }

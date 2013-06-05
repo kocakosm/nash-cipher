@@ -17,9 +17,7 @@
 package org.kocakosm.nash;
 
 import java.io.Serializable;
-import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Random;
 
 /**
  * Secret key for Nash ciphers. Instances of this class are immutable.
@@ -29,7 +27,6 @@ import java.util.Random;
 public final class Key implements Serializable
 {
 	private static final long serialVersionUID = 84530924754951016L;
-	private static final Random PRNG = new SecureRandom();
 
 	/**
 	 * Creates a new random key.
@@ -52,15 +49,23 @@ public final class Key implements Serializable
 	private final boolean[] blueBits;
 	private final int[] redPermutations;
 	private final int[] bluePermutations;
-	private final boolean[] initialState;
 
 	private Key(int size)
 	{
-		this.redBits = generateBits(size);
-		this.blueBits = generateBits(size);
+		this.redBits = Random.nextBits(size);
+		this.blueBits = Random.nextBits(size);
 		this.redPermutations = generatePermutations(size);
 		this.bluePermutations = generatePermutations(size);
-		this.initialState = generateBits(size);
+	}
+
+	/**
+	 * Returns the size of the key (actually, the permuter's size).
+	 * 
+	 * @return the size of the key (actually, the permuter's size).
+	 */
+	public int getSize()
+	{
+		return redBits.length;
 	}
 
 	/**
@@ -81,16 +86,6 @@ public final class Key implements Serializable
 	public int[] getBluePermutations()
 	{
 		return Arrays.copyOf(bluePermutations, bluePermutations.length);
-	}
-
-	/**
-	 * Returns the cipher's initial state.
-	 *
-	 * @return the cipher's initial state.
-	 */
-	public boolean[] getInitialState()
-	{
-		return Arrays.copyOf(initialState, initialState.length);
 	}
 
 	/**
@@ -125,7 +120,6 @@ public final class Key implements Serializable
 		final Key k = (Key)o;
 		return Arrays.equals(redBits, k.redBits)
 			&& Arrays.equals(blueBits, k.blueBits)
-			&& Arrays.equals(initialState, k.initialState)
 			&& Arrays.equals(redPermutations, k.redPermutations)
 			&& Arrays.equals(bluePermutations, k.bluePermutations);
 	}
@@ -134,19 +128,9 @@ public final class Key implements Serializable
 	public int hashCode()
 	{
 		int hash = 7;
-		hash = 89 * hash + Arrays.hashCode(initialState);
 		hash = 89 * hash + Arrays.hashCode(redPermutations);
 		hash = 89 * hash + Arrays.hashCode(bluePermutations);
 		return hash;
-	}
-
-	private boolean[] generateBits(int size)
-	{
-		boolean[] bits = new boolean[size];
-		for (int i = 0; i < size; i++) {
-			bits[i] = PRNG.nextBoolean();
-		}
-		return bits;
 	}
 
 	private int[] generatePermutations(int size)
@@ -156,21 +140,6 @@ public final class Key implements Serializable
 			values[i] = i;
 		}
 		values[size - 1] = 0;
-		return shuffle(values);
-	}
-
-	private int[] shuffle(int... values)
-	{
-		for (int i = values.length; i > 1; i--) {
-			swap(values, i - 1, PRNG.nextInt(i));
-		}
-		return values;
-	}
-
-	private void swap(int[] array, int i, int j)
-	{
-		int v = array[i];
-		array[i] = array[j];
-		array[j] = v;
+		return Random.shuffle(values);
 	}
 }

@@ -41,24 +41,38 @@ public final class NashCipher
 	 * Creates a new {@code NashCipher}.
 	 *
 	 * @param key the cipher's secret key.
+	 * @param iv the cipher's initialization vector.
 	 * @param mode the cipher's operation mode.
 	 *
 	 * @throws NullPointerException if one of the arguments is {@code null}.
+	 * @throws IllegalArgumentException if {@code key} and {@code iv} have 
+	 *	different sizes.
 	 */
-	public NashCipher(Key key, Mode mode)
+	public NashCipher(Key key, IV iv, Mode mode)
 	{
 		if (key == null || mode == null) {
 			throw new NullPointerException();
 		}
 		this.key = key;
 		this.mode = mode;
-		reset();
+		reset(iv);
 	}
 
-	/** Resets this cipher. */
-	public void reset()
+	/**
+	 * Resets this cipher.
+	 * 
+	 * @param iv the initialization vector.
+	 * 
+	 * @throws NullPointerException if {@code iv} is {@code null}.
+	 * @throws IllegalArgumentException if {@code iv}'s size doesn't match 
+	 *	the size of the cipher's key.
+	 */
+	public void reset(IV iv)
 	{
-		state = key.getInitialState();
+		if (key.getSize() != iv.getSize()) {
+			throw new IllegalArgumentException();
+		}
+		state = iv.getBits();
 	}
 
 	/**

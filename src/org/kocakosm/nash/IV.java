@@ -16,31 +16,84 @@
 
 package org.kocakosm.nash;
 
-import static org.junit.Assert.assertArrayEquals;
-
-import java.util.Random;
-
-import org.junit.Test;
+import java.io.Serializable;
+import java.util.Arrays;
 
 /**
- * {@link NashCipher}'s unit tests.
+ * Initialization vector. Instances of this class are immutable.
  *
  * @author Osman KOCAK
  */
-public final class NashCipherTest
+public final class IV implements Serializable
 {
-	private static final Random PRNG = new Random();
+	private static final long serialVersionUID = 7663912371138830514L;
 
-	@Test
-	public void test()
+	/**
+	 * Creates a new random IV.
+	 *
+	 * @param size the size of the IV.
+	 *
+	 * @return the created IV.
+	 *
+	 * @throws IllegalArgumentException if {@code size <= 0}.
+	 */
+	public static IV create(int size)
 	{
-		IV iv = IV.create(64);
-		Key k = Key.create(64);
-		NashCipher enc = new NashCipher(k, iv, NashCipher.Mode.ENCRYPTION);
-		NashCipher dec = new NashCipher(k, iv, NashCipher.Mode.DECRYPTION);
-		byte[] data = new byte[PRNG.nextInt(4096)];
-		PRNG.nextBytes(data);
+		if (size <= 0) {
+			throw new IllegalArgumentException();
+		}
+		return new IV(size);
+	}
 
-		assertArrayEquals(data, dec.process(enc.process(data)));
+	private final boolean[] bits;
+
+	private IV(int size)
+	{
+		this.bits = Random.nextBits(size);
+	}
+
+	/**
+	 * Returns this IV's size.
+	 * 
+	 * @return this IV's size.
+	 */
+	public int getSize()
+	{
+		return bits.length;
+	}
+
+	/**
+	 * Returns this IV's value.
+	 * 
+	 * @return this IV's value.
+	 */
+	public boolean[] getBits()
+	{
+		return Arrays.copyOf(bits, bits.length);
+	}
+
+	@Override
+	public String toString()
+	{
+		return Arrays.toString(bits);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Arrays.hashCode(bits);
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == this) {
+			return true;
+		}
+		if (!(o instanceof IV)) {
+			return false;
+		}
+		final IV iv = (IV)o;
+		return Arrays.equals(bits, iv.bits);
 	}
 }
