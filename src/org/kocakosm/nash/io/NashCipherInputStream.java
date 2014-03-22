@@ -90,7 +90,7 @@ public final class NashCipherInputStream extends InputStream
 	{
 		synchronized (lock) {
 			int b = encrypted.read();
-			return b < 0 ? b : cipher.process((byte)b)[0] & 0xFF;
+			return b < 0 ? b : cipher.process((byte) b)[0] & 0xFF;
 		}
 	}
 

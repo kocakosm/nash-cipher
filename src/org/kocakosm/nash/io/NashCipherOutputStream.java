@@ -78,7 +78,7 @@ public final class NashCipherOutputStream extends OutputStream
 	public void write(int i) throws IOException
 	{
 		synchronized (lock) {
-			encrypted.write(cipher.process((byte)i));
+			encrypted.write(cipher.process((byte) i));
 		}
 	}
 

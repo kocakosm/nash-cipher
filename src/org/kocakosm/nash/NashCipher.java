@@ -121,11 +121,11 @@ public final class NashCipher
 			int val = 0;
 			for (int j = 0; j < 8; j++) {
 				boolean in = ((bytes[i] & 0xFF) & (1 << j)) > 0;
-				boolean out = xor(in, state[state.length - 1]);
+				boolean out = in ^ state[state.length - 1];
 				val = (val >>> 1) | (out ? 0x80 : 0);
 				process(out);
 			}
-			encrypted[i] = (byte)val;
+			encrypted[i] = (byte) val;
 		}
 		return encrypted;
 	}
@@ -137,11 +137,11 @@ public final class NashCipher
 			int val = 0;
 			for (int j = 0; j < 8; j++) {
 				boolean in = ((bytes[i] & 0xFF) & (1 << j)) > 0;
-				boolean out = xor(in, state[state.length - 1]);
+				boolean out = in ^ state[state.length - 1];
 				val = (val >>> 1) | (out ? 0x80 : 0);
 				process(in);
 			}
-			decrypted[i] = (byte)val;
+			decrypted[i] = (byte) val;
 		}
 		return decrypted;
 	}
@@ -158,13 +158,8 @@ public final class NashCipher
 			permutations = key.getBluePermutations();
 		}
 		for (int i = 1; i < state.length; i++) {
-			state[i] = xor(state[permutations[i]], bits[i]);
+			state[i] = state[permutations[i]] ^ bits[i];
 		}
 		state[0] = bit;
-	}
-
-	private boolean xor(boolean a, boolean b)
-	{
-		return a ? !b : b;
 	}
 }
