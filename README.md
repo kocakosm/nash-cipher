@@ -1,7 +1,7 @@
 Nash-Cipher
 ===========
 
-[![Build Status](https://secure.travis-ci.org/kocakosm/nash-cipher.png?branch=master)](http://travis-ci.org/kocakosm/nash-cipher) [![Dependency Status](https://www.versioneye.com/user/projects/532df6a6f5994914490001c8/badge.png)](https://www.versioneye.com/user/projects/532df6a6f5994914490001c8)
+[![Build Status](https://secure.travis-ci.org/kocakosm/nash-cipher.png?branch=master)](http://travis-ci.org/kocakosm/nash-cipher) [![Dependency Status](https://www.versioneye.com/user/projects/532df6a6f5994914490001c8/badge.png)](https://www.versioneye.com/user/projects/532df6a6f5994914490001c8) [![Coverage Status](https://coveralls.io/repos/kocakosm/nash-cipher/badge.png)](https://coveralls.io/r/kocakosm/nash-cipher)
 
 
 Overview
