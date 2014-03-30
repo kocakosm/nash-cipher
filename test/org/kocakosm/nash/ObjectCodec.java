@@ -14,47 +14,61 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  *----------------------------------------------------------------------------*/
 
-package org.kocakosm.nash.io;
-
-import static org.junit.Assert.assertArrayEquals;
-
-import org.kocakosm.nash.IV;
-import org.kocakosm.nash.Key;
+package org.kocakosm.nash;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Random;
-
-import org.junit.Test;
+import java.io.Closeable;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
- * Nash cipher streams tests.
+ * Serialization utilities.
  *
  * @author Osman KOCAK
  */
-public final class NashCipherStreamsTest
+final class ObjectCodec
 {
-	@Test
-	public void test() throws Exception
+	static byte[] encode(Serializable object) throws IOException
 	{
-		Random prng = new Random();
-		byte[] data = new byte[prng.nextInt(4096)];
-		prng.nextBytes(data);
-		IV iv = IV.create(64);
-		Key secret = Key.create(64);
+		ObjectOutputStream oos = null;
+		try {
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			oos = new ObjectOutputStream(out);
+			oos.writeObject(object);
+			oos.flush();
+			return out.toByteArray();
+		} finally {
+			close(oos);
+		}
+	}
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		OutputStream out = new NashCipherOutputStream(secret, iv, baos);
-		out.write(data);
-		out.flush();
+	static <T extends Serializable> T decode(byte[] object, Class<T> t)
+		throws IOException
+	{
+		ObjectInputStream ois = null;
+		ByteArrayInputStream in = new ByteArrayInputStream(object);
+		try {
+			ois = new ObjectInputStream(in);
+			return (T) ois.readObject();
+		} catch (ClassNotFoundException ex) {
+			throw new IOException(ex);
+		} finally {
+			close(ois);
+		}
+	}
 
-		InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-		InputStream in = new NashCipherInputStream(secret, iv, bais);
-		byte[] decrypted = new byte[data.length];
-		in.read(decrypted);
+	private static void close(Closeable stream) throws IOException
+	{
+		if (stream != null) {
+			stream.close();
+		}
+	}
 
-		assertArrayEquals(data, decrypted);
+	private ObjectCodec()
+	{
+		/* ... */
 	}
 }

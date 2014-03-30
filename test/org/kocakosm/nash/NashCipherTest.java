@@ -29,18 +29,56 @@ import org.junit.Test;
  */
 public final class NashCipherTest
 {
-	private static final Random PRNG = new Random();
+	private final IV iv = IV.create(64);
+	private final Key key = Key.create(64);
+	private final Random prng = new Random();
 
 	@Test
-	public void test()
+	public void testCipher()
 	{
-		IV iv = IV.create(64);
-		Key k = Key.create(64);
-		NashCipher enc = new NashCipher(k, iv, NashCipher.Mode.ENCRYPTION);
-		NashCipher dec = new NashCipher(k, iv, NashCipher.Mode.DECRYPTION);
-		byte[] data = new byte[PRNG.nextInt(4096)];
-		PRNG.nextBytes(data);
+		NashCipher enc = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
+		NashCipher dec = new NashCipher(key, iv, NashCipher.Mode.DECRYPTION);
+		byte[] data = new byte[prng.nextInt(4096)];
+		prng.nextBytes(data);
 
 		assertArrayEquals(data, dec.process(enc.process(data)));
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testCreateWithNullKey()
+	{
+		new NashCipher(null, iv, NashCipher.Mode.ENCRYPTION);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testCreateWithNullIV()
+	{
+		new NashCipher(key, null, NashCipher.Mode.ENCRYPTION);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void testCreateWithNullMode()
+	{
+		new NashCipher(key, iv, null);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateWithDifferentKeyAndIVSize()
+	{
+		new NashCipher(Key.create(4), IV.create(8), NashCipher.Mode.DECRYPTION);
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testProcessWithNegativeOffset()
+	{
+		NashCipher enc = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
+		enc.process(new byte[0], -1, 0);
+	}
+
+	@Test(expected = IndexOutOfBoundsException.class)
+	public void testProcessWithNegativeLength()
+	{
+		NashCipher enc = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
+		enc.process(new byte[0], 1, -1);
 	}
 }

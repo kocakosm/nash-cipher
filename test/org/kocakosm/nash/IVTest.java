@@ -14,47 +14,50 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
  *----------------------------------------------------------------------------*/
 
-package org.kocakosm.nash.io;
+package org.kocakosm.nash;
 
-import static org.junit.Assert.assertArrayEquals;
-
-import org.kocakosm.nash.IV;
-import org.kocakosm.nash.Key;
-
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Random;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
 /**
- * Nash cipher streams tests.
+ * {@link IV}'s unit tests.
  *
  * @author Osman KOCAK
  */
-public final class NashCipherStreamsTest
+public final class IVTest
 {
 	@Test
-	public void test() throws Exception
+	public void testCreate()
 	{
-		Random prng = new Random();
-		byte[] data = new byte[prng.nextInt(4096)];
-		prng.nextBytes(data);
-		IV iv = IV.create(64);
-		Key secret = Key.create(64);
+		IV iv = IV.create(32);
+		assertEquals(32, iv.getSize());
+		assertEquals(32, iv.getBits().length);
+	}
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		OutputStream out = new NashCipherOutputStream(secret, iv, baos);
-		out.write(data);
-		out.flush();
+	@Test(expected = IllegalArgumentException.class)
+	public void testCreateWithNegativeSize()
+	{
+		IV.create(-1);
+	}
 
-		InputStream bais = new ByteArrayInputStream(baos.toByteArray());
-		InputStream in = new NashCipherInputStream(secret, iv, bais);
-		byte[] decrypted = new byte[data.length];
-		in.read(decrypted);
+	@Test
+	public void testEqualsAndHashCode()
+	{
+		IV iv = IV.create(32);
+		assertFalse(iv.equals(IV.create(16)));
+		assertFalse(iv.equals(IV.create(32)));
+		assertTrue(iv.equals(iv));
+		assertEquals(iv.hashCode(), iv.hashCode());
+		assertFalse(iv.equals((IV) (null)));
+	}
 
-		assertArrayEquals(data, decrypted);
+	@Test
+	public void testSerialization() throws Exception
+	{
+		IV iv = IV.create(32);
+		IV decoded = ObjectCodec.decode(ObjectCodec.encode(iv), IV.class);
+		assertNotSame(iv, decoded);
+		assertEquals(iv, decoded);
 	}
 }

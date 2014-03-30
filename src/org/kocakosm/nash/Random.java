@@ -45,19 +45,6 @@ final class Random
 	}
 
 	/**
-	 * Returns a pseudo-random {@code int} value, uniformly distributed 
-	 * between 0 (inclusive) and the given value (exclusive).
-	 * 
-	 * @param n the bound on the random number to be returned. 
-	 * 
-	 * @throws IllegalArgumentException if {@code n} is negative.
-	 */
-	static int nextInt(int n)
-	{
-		return PRNG.nextInt(n);
-	}
-
-	/**
 	 * Shuffles the given values and returns them in a new array using the 
 	 * optimized version of the Fisher-Yates shuffle algorithm (Fisher, 
 	 * Yates, Durstenfeld, Knuth).

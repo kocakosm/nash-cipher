@@ -73,12 +73,6 @@ public final class IV implements Serializable
 	}
 
 	@Override
-	public String toString()
-	{
-		return Arrays.toString(bits);
-	}
-
-	@Override
 	public int hashCode()
 	{
 		return Arrays.hashCode(bits);
