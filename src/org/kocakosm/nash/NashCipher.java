@@ -45,7 +45,7 @@ public final class NashCipher
 	 * @param mode the cipher's operation mode.
 	 *
 	 * @throws NullPointerException if one of the arguments is {@code null}.
-	 * @throws IllegalArgumentException if {@code key} and {@code iv} have 
+	 * @throws IllegalArgumentException if {@code key} and {@code iv} have
 	 *	different sizes.
 	 */
 	public NashCipher(Key key, IV iv, Mode mode)
@@ -60,11 +60,11 @@ public final class NashCipher
 
 	/**
 	 * Resets this cipher.
-	 * 
+	 *
 	 * @param iv the initialization vector.
-	 * 
+	 *
 	 * @throws NullPointerException if {@code iv} is {@code null}.
-	 * @throws IllegalArgumentException if {@code iv}'s size doesn't match 
+	 * @throws IllegalArgumentException if {@code iv}'s size doesn't match
 	 *	the size of the cipher's key.
 	 */
 	public void reset(IV iv)
@@ -108,42 +108,18 @@ public final class NashCipher
 		if (off < 0 || len < 0) {
 			throw new IndexOutOfBoundsException();
 		}
-		if (mode == Mode.ENCRYPTION) {
-			return encrypt(bytes, off, len);
-		}
-		return decrypt(bytes, off, len);
-	}
-
-	private byte[] encrypt(byte[] bytes, int off, int len)
-	{
-		byte[] encrypted = new byte[len];
+		byte[] processed = new byte[len];
 		for (int i = off; i < off + len; i++) {
 			int val = 0;
 			for (int j = 0; j < 8; j++) {
 				boolean in = ((bytes[i] & 0xFF) & (1 << j)) > 0;
 				boolean out = in ^ state[state.length - 1];
 				val = (val >>> 1) | (out ? 0x80 : 0);
-				process(out);
+				process(mode == Mode.DECRYPTION ? in : out);
 			}
-			encrypted[i] = (byte) val;
+			processed[i] = (byte) val;
 		}
-		return encrypted;
-	}
-
-	private byte[] decrypt(byte[] bytes, int off, int len)
-	{
-		byte[] decrypted = new byte[len];
-		for (int i = off; i < off + len; i++) {
-			int val = 0;
-			for (int j = 0; j < 8; j++) {
-				boolean in = ((bytes[i] & 0xFF) & (1 << j)) > 0;
-				boolean out = in ^ state[state.length - 1];
-				val = (val >>> 1) | (out ? 0x80 : 0);
-				process(in);
-			}
-			decrypted[i] = (byte) val;
-		}
-		return decrypted;
+		return processed;
 	}
 
 	private void process(boolean bit)
