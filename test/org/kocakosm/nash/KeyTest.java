@@ -16,9 +16,10 @@
 
 package org.kocakosm.nash;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /**
  * {@link Key}'s unit tests.
@@ -38,10 +39,11 @@ public final class KeyTest
 		assertEquals(32, k.getBluePermutations().length);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateWithNegatkeSize()
 	{
-		Key.create(-1);
+		Executable toTest = () -> Key.create(-1);
+		assertThrows(IllegalArgumentException.class, toTest);
 	}
 
 	@Test

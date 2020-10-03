@@ -16,8 +16,9 @@
 
 package org.kocakosm.nash.io;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
@@ -27,7 +28,8 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /**
  * {@link NashCipherInputStream}'s unit tests.
@@ -39,10 +41,11 @@ public final class NashCipherInputStreamTest
 	private final IV iv = IV.create(8);
 	private final Key key = Key.create(8);
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testCreateWithNullStream()
 	{
-		new NashCipherInputStream(key, iv, null);
+		Executable toTest = () -> new NashCipherInputStream(key, iv, null);
+		assertThrows(NullPointerException.class, toTest);
 	}
 
 	@Test
@@ -70,25 +73,31 @@ public final class NashCipherInputStreamTest
 		assertFalse(nash.markSupported());
 	}
 
-	@Test(expected = UnsupportedOperationException.class)
+	@Test
 	public void testMark() throws Exception
 	{
 		InputStream in = mock(InputStream.class);
-		new NashCipherInputStream(key, iv, in).mark(100);
+		NashCipherInputStream nash = new NashCipherInputStream(key, iv, in);
+		Executable toTest = () -> nash.mark(100);
+		assertThrows(UnsupportedOperationException.class, toTest);
 	}
 
-	@Test(expected = IOException.class)
+	@Test
 	public void testReset() throws Exception
 	{
 		InputStream in = mock(InputStream.class);
-		new NashCipherInputStream(key, iv, in).reset();
+		NashCipherInputStream nash = new NashCipherInputStream(key, iv, in);
+		Executable toTest = () -> nash.reset();
+		assertThrows(IOException.class, toTest);
 	}
 
-	@Test(expected = IOException.class)
+	@Test
 	public void testSkip() throws Exception
 	{
 		InputStream in = mock(InputStream.class);
-		new NashCipherInputStream(key, iv, in).skip(16);
+		NashCipherInputStream nash = new NashCipherInputStream(key, iv, in);
+		Executable toTest = () -> nash.skip(16);
+		assertThrows(IOException.class, toTest);
 	}
 
 	@Test

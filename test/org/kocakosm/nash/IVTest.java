@@ -16,9 +16,10 @@
 
 package org.kocakosm.nash;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /**
  * {@link IV}'s unit tests.
@@ -35,10 +36,11 @@ public final class IVTest
 		assertEquals(32, iv.getBits().length);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testCreateWithNegativeSize()
 	{
-		IV.create(-1);
+		Executable toTest = () -> IV.create(-1);
+		assertThrows(IllegalArgumentException.class, toTest);
 	}
 
 	@Test

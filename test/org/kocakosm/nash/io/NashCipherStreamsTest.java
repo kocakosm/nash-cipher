@@ -16,7 +16,7 @@
 
 package org.kocakosm.nash.io;
 
-import static org.junit.Assert.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
@@ -27,7 +27,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Nash cipher streams tests.
@@ -37,7 +37,7 @@ import org.junit.Test;
 public final class NashCipherStreamsTest
 {
 	@Test
-	public void test() throws Exception
+	public void testRoundtrip() throws Exception
 	{
 		Random prng = new Random();
 		byte[] data = new byte[prng.nextInt(4096)];

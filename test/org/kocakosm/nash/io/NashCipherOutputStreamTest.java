@@ -16,8 +16,10 @@
 
 package org.kocakosm.nash.io;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
@@ -26,7 +28,8 @@ import org.kocakosm.nash.NashCipher;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 /**
  * {@link NashCipherOutputStream}'s unit tests.
@@ -38,10 +41,11 @@ public final class NashCipherOutputStreamTest
 	private final IV iv = IV.create(8);
 	private final Key key = Key.create(8);
 
-	@Test(expected = NullPointerException.class)
+	@Test
 	public void testCreateWithNullStream()
 	{
-		new NashCipherOutputStream(key, iv, null);
+		Executable toTest = () -> new NashCipherOutputStream(key, iv, null);
+		assertThrows(NullPointerException.class, toTest);
 	}
 
 	@Test

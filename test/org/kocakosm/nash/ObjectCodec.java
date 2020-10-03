@@ -52,7 +52,7 @@ final class ObjectCodec
 		ByteArrayInputStream in = new ByteArrayInputStream(object);
 		try {
 			ois = new ObjectInputStream(in);
-			return (T) ois.readObject();
+			return t.cast(ois.readObject());
 		} catch (ClassNotFoundException ex) {
 			throw new IOException(ex);
 		} finally {
