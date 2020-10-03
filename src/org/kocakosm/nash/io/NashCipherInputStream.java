@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------*
  * This file is part of Nash-Cipher.                                          *
- * Copyright (C) 2012-2013 Osman KOCAK <kocakosm@gmail.com>                   *
+ * Copyright (C) 2012-2013 Osman Koçak <kocakosm@gmail.com>                   *
  *                                                                            *
  * This program is free software: you can redistribute it and/or modify it    *
  * under the terms of the GNU Lesser General Public License as published by   *
@@ -29,7 +29,7 @@ import java.io.InputStream;
  * and a {@link NashCipher} so that the data read from the inner stream are
  * decrypted before being returned. Instances of this class are thread-safe.
  *
- * @author Osman KOCAK
+ * @author Osman Koçak
  */
 public final class NashCipherInputStream extends InputStream
 {

@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------*
  * This file is part of Nash-Cipher.                                          *
- * Copyright (C) 2012-2013 Osman KOCAK <kocakosm@gmail.com>                   *
+ * Copyright (C) 2012-2013 Osman Koçak <kocakosm@gmail.com>                   *
  *                                                                            *
  * This program is free software: you can redistribute it and/or modify it    *
  * under the terms of the GNU Lesser General Public License as published by   *
@@ -24,12 +24,12 @@ import org.junit.jupiter.api.function.Executable;
 /**
  * {@link IV}'s unit tests.
  *
- * @author Osman KOCAK
+ * @author Osman Koçak
  */
 public final class IVTest
 {
 	@Test
-	public void testCreate()
+	public void testConstructor()
 	{
 		IV iv = IV.create(32);
 		assertEquals(32, iv.getSize());
@@ -37,7 +37,7 @@ public final class IVTest
 	}
 
 	@Test
-	public void testCreateWithNegativeSize()
+	public void testConstructorWithNegativeSize()
 	{
 		Executable toTest = () -> IV.create(-1);
 		assertThrows(IllegalArgumentException.class, toTest);

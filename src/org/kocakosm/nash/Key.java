@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------*
  * This file is part of Nash-Cipher.                                          *
- * Copyright (C) 2012-2013 Osman KOCAK <kocakosm@gmail.com>                   *
+ * Copyright (C) 2012-2013 Osman Koçak <kocakosm@gmail.com>                   *
  *                                                                            *
  * This program is free software: you can redistribute it and/or modify it    *
  * under the terms of the GNU Lesser General Public License as published by   *
@@ -22,7 +22,7 @@ import java.util.Arrays;
 /**
  * Secret key for Nash ciphers. Instances of this class are immutable.
  *
- * @author Osman KOCAK
+ * @author Osman Koçak
  */
 public final class Key implements Serializable
 {
@@ -60,7 +60,7 @@ public final class Key implements Serializable
 
 	/**
 	 * Returns the size of the key (actually, the permuter's size).
-	 * 
+	 *
 	 * @return the size of the key (actually, the permuter's size).
 	 */
 	public int getSize()
@@ -100,12 +100,21 @@ public final class Key implements Serializable
 
 	/**
 	 * Returns the red permutations table.
-	 * 
+	 *
 	 * @return the red permutations table.
 	 */
 	public int[] getRedPermutations()
 	{
 		return Arrays.copyOf(redPermutations, redPermutations.length);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int hash = 7;
+		hash = 89 * hash + Arrays.hashCode(redPermutations);
+		hash = 89 * hash + Arrays.hashCode(bluePermutations);
+		return hash;
 	}
 
 	@Override
@@ -122,15 +131,6 @@ public final class Key implements Serializable
 			&& Arrays.equals(blueBits, k.blueBits)
 			&& Arrays.equals(redPermutations, k.redPermutations)
 			&& Arrays.equals(bluePermutations, k.bluePermutations);
-	}
-
-	@Override
-	public int hashCode()
-	{
-		int hash = 7;
-		hash = 89 * hash + Arrays.hashCode(redPermutations);
-		hash = 89 * hash + Arrays.hashCode(bluePermutations);
-		return hash;
 	}
 
 	private int[] generatePermutations(int size)

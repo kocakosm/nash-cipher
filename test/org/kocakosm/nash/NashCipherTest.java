@@ -1,6 +1,6 @@
 /*----------------------------------------------------------------------------*
  * This file is part of Nash-Cipher.                                          *
- * Copyright (C) 2012-2013 Osman KOCAK <kocakosm@gmail.com>                   *
+ * Copyright (C) 2012-2013 Osman Koçak <kocakosm@gmail.com>                   *
  *                                                                            *
  * This program is free software: you can redistribute it and/or modify it    *
  * under the terms of the GNU Lesser General Public License as published by   *
@@ -29,7 +29,7 @@ import org.junit.jupiter.api.function.Executable;
 /**
  * {@link NashCipher}'s unit tests.
  *
- * @author Osman KOCAK
+ * @author Osman Koçak
  */
 public final class NashCipherTest
 {
@@ -49,28 +49,28 @@ public final class NashCipherTest
 	}
 
 	@Test
-	public void testCreateWithNullKey()
+	public void testConstructorWithNullKey()
 	{
 		Executable toTest = () -> new NashCipher(null, iv, Mode.ENCRYPTION);
 		assertThrows(NullPointerException.class, toTest);
 	}
 
 	@Test
-	public void testCreateWithNullIV()
+	public void testConstructorWithNullIV()
 	{
 		Executable toTest = () -> new NashCipher(key, null, Mode.ENCRYPTION);
 		assertThrows(NullPointerException.class, toTest);
 	}
 
 	@Test
-	public void testCreateWithNullMode()
+	public void testConstructorWithNullMode()
 	{
 		Executable toTest = () -> new NashCipher(key, iv, null);
 		assertThrows(NullPointerException.class, toTest);
 	}
 
 	@Test
-	public void testCreateWithDifferentKeyAndIVSize()
+	public void testConstructorWithDifferentKeyAndIVSize()
 	{
 		Executable toTest = () -> new NashCipher(
 			Key.create(4), IV.create(8), Mode.DECRYPTION);
