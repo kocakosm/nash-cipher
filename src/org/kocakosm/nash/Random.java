@@ -1,17 +1,12 @@
 /*----------------------------------------------------------------------------*
  * This file is part of Nash-Cipher.                                          *
- * Copyright (C) 2012-2013 Osman Koçak <kocakosm@gmail.com>                   *
+ * Copyright © 2012-2020 Osman Koçak <kocakosm@gmail.com>                     *
  *                                                                            *
- * This program is free software: you can redistribute it and/or modify it    *
- * under the terms of the GNU Lesser General Public License as published by   *
- * the Free Software Foundation, either version 3 of the License, or (at your *
- * option) any later version.                                                 *
- * This program is distributed in the hope that it will be useful, but        *
- * WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY *
- * or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public     *
- * License for more details.                                                  *
- * You should have received a copy of the GNU Lesser General Public License   *
- * along with this program. If not, see <http://www.gnu.org/licenses/>.       *
+ * This program is free software. It comes without any warranty, to the       *
+ * extent permitted by applicable law. You can redistribute it and/or modify  *
+ * it under the terms of the Do What The Fuck You Want To Public License,     *
+ * Version 2, as published by Sam Hocevar. You should have received a copy of *
+ * the license along with this program. If not, see <http://www.wtfpl.net/>.  *
  *----------------------------------------------------------------------------*/
 
 package org.kocakosm.nash;
@@ -30,9 +25,9 @@ final class Random
 
 	/**
 	 * Generates random bits and returns them as a {@code boolean} array.
-	 * 
+	 *
 	 * @param n the number of bits to return.
-	 * 
+	 *
 	 * @throws NegativeArraySizeException if {@code n} is negative.
 	 */
 	static boolean[] nextBits(int n)
@@ -45,14 +40,14 @@ final class Random
 	}
 
 	/**
-	 * Shuffles the given values and returns them in a new array using the 
-	 * optimized version of the Fisher-Yates shuffle algorithm (Fisher, 
+	 * Shuffles the given values and returns them in a new array using the
+	 * optimized version of the Fisher-Yates shuffle algorithm (Fisher,
 	 * Yates, Durstenfeld, Knuth).
-	 * 
+	 *
 	 * @param values the values to shuffle.
-	 * 
+	 *
 	 * @return the shuffled array.
-	 * 
+	 *
 	 * @throws NullPointerException if {@code values} is {@code null}.
 	 */
 	static int[] shuffle(int... values)
