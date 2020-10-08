@@ -11,6 +11,8 @@
 
 package org.kocakosm.nash;
 
+import java.util.Objects;
+
 /**
  * Nash's cipher. Instances of this class are not thread-safe.
  *
@@ -45,9 +47,8 @@ public final class NashCipher
 	 */
 	public NashCipher(Key key, IV iv, Mode mode)
 	{
-		if (key == null || mode == null) {
-			throw new NullPointerException();
-		}
+		Objects.requireNonNull(key);
+		Objects.requireNonNull(mode);
 		this.key = key;
 		this.mode = mode;
 		reset(iv);

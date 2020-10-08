@@ -33,17 +33,6 @@ public final class NashCipherTest
 	private final Random prng = new Random();
 
 	@Test
-	public void testCipher()
-	{
-		NashCipher enc = new NashCipher(key, iv, Mode.ENCRYPTION);
-		NashCipher dec = new NashCipher(key, iv, Mode.DECRYPTION);
-		byte[] data = new byte[prng.nextInt(4096)];
-		prng.nextBytes(data);
-
-		assertArrayEquals(data, dec.process(enc.process(data)));
-	}
-
-	@Test
 	public void testConstructorWithNullKey()
 	{
 		Executable toTest = () -> new NashCipher(null, iv, Mode.ENCRYPTION);
@@ -86,5 +75,15 @@ public final class NashCipherTest
 		NashCipher enc = new NashCipher(key, iv, Mode.ENCRYPTION);
 		Executable toTest = () -> enc.process(new byte[0], 1, -1);
 		assertThrows(IndexOutOfBoundsException.class, toTest);
+	}
+
+	@Test
+	public void testEncryptionDecryptionRoundTrip()
+	{
+		NashCipher enc = new NashCipher(key, iv, Mode.ENCRYPTION);
+		NashCipher dec = new NashCipher(key, iv, Mode.DECRYPTION);
+		byte[] data = new byte[prng.nextInt(4096)];
+		prng.nextBytes(data);
+		assertArrayEquals(data, dec.process(enc.process(data)));
 	}
 }

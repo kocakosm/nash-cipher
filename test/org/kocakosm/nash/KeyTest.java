@@ -24,7 +24,7 @@ import org.junit.jupiter.api.function.Executable;
 public final class KeyTest
 {
 	@Test
-	public void testConstructor()
+	public void testCreate()
 	{
 		Key k = Key.create(32);
 		assertEquals(32, k.getSize());
@@ -35,7 +35,7 @@ public final class KeyTest
 	}
 
 	@Test
-	public void testConstructorWithNegativeSize()
+	public void testCreateWithNegativeSize()
 	{
 		Executable toTest = () -> Key.create(-1);
 		assertThrows(IllegalArgumentException.class, toTest);
@@ -53,10 +53,10 @@ public final class KeyTest
 	}
 
 	@Test
-	public void testSerialization() throws Exception
+	public void testSerializationDeserializationRoundTrip() throws Exception
 	{
 		Key k = Key.create(32);
-		Key decoded = ObjectCodec.decode(ObjectCodec.encode(k), Key.class);
+		Key decoded = Codec.decode(Codec.encode(k), Key.class);
 		assertNotSame(k, decoded);
 		assertEquals(k, decoded);
 	}

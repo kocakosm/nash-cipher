@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 public final class NashCipherStreamsTest
 {
 	@Test
-	public void testRoundtrip() throws Exception
+	public void testEncryptionDecryptionRoundTrip() throws Exception
 	{
 		Random prng = new Random();
 		byte[] data = new byte[prng.nextInt(4096)];

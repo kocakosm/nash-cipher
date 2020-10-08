@@ -18,10 +18,12 @@ import static org.mockito.Mockito.verify;
 import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
 import org.kocakosm.nash.NashCipher;
+import org.kocakosm.nash.NashCipher.Mode;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -46,7 +48,7 @@ public final class NashCipherInputStreamTest
 	@Test
 	public void testAvailable() throws Exception
 	{
-		byte[] data = "Hello".getBytes("UTF-8");
+		byte[] data = "Hello".getBytes(StandardCharsets.UTF_8);
 		InputStream in = new ByteArrayInputStream(data);
 		InputStream nash = new NashCipherInputStream(key, iv, in);
 		assertEquals(in.available(), nash.available());
@@ -72,7 +74,7 @@ public final class NashCipherInputStreamTest
 	public void testMark() throws Exception
 	{
 		InputStream in = mock(InputStream.class);
-		NashCipherInputStream nash = new NashCipherInputStream(key, iv, in);
+		InputStream nash = new NashCipherInputStream(key, iv, in);
 		Executable toTest = () -> nash.mark(100);
 		assertThrows(UnsupportedOperationException.class, toTest);
 	}
@@ -81,7 +83,7 @@ public final class NashCipherInputStreamTest
 	public void testReset() throws Exception
 	{
 		InputStream in = mock(InputStream.class);
-		NashCipherInputStream nash = new NashCipherInputStream(key, iv, in);
+		InputStream nash = new NashCipherInputStream(key, iv, in);
 		Executable toTest = () -> nash.reset();
 		assertThrows(IOException.class, toTest);
 	}
@@ -90,7 +92,7 @@ public final class NashCipherInputStreamTest
 	public void testSkip() throws Exception
 	{
 		InputStream in = mock(InputStream.class);
-		NashCipherInputStream nash = new NashCipherInputStream(key, iv, in);
+		InputStream nash = new NashCipherInputStream(key, iv, in);
 		Executable toTest = () -> nash.skip(16);
 		assertThrows(IOException.class, toTest);
 	}
@@ -98,7 +100,7 @@ public final class NashCipherInputStreamTest
 	@Test
 	public void testRead() throws Exception
 	{
-		byte[] data = "Hello".getBytes("UTF-8");
+		byte[] data = "Hello".getBytes(StandardCharsets.UTF_8);
 		InputStream in = new ByteArrayInputStream(data);
 		InputStream nash = new NashCipherInputStream(key, iv, in);
 		byte[] decrypted = new byte[data.length];
@@ -106,20 +108,20 @@ public final class NashCipherInputStreamTest
 			decrypted[i] = (byte) nash.read();
 		}
 		assertEquals(-1, nash.read());
-		NashCipher cipher = new NashCipher(key, iv, NashCipher.Mode.DECRYPTION);
+		NashCipher cipher = new NashCipher(key, iv, Mode.DECRYPTION);
 		assertArrayEquals(cipher.process(data), decrypted);
 	}
 
 	@Test
 	public void testReadArray() throws Exception
 	{
-		byte[] data = "Hello".getBytes("UTF-8");
+		byte[] data = "Hello".getBytes(StandardCharsets.UTF_8);
 		InputStream in = new ByteArrayInputStream(data);
 		InputStream nash = new NashCipherInputStream(key, iv, in);
 		byte[] decrypted = new byte[data.length];
 		nash.read(decrypted);
 		assertEquals(-1, nash.read(new byte[data.length]));
-		NashCipher cipher = new NashCipher(key, iv, NashCipher.Mode.DECRYPTION);
+		NashCipher cipher = new NashCipher(key, iv, Mode.DECRYPTION);
 		assertArrayEquals(cipher.process(data), decrypted);
 	}
 }

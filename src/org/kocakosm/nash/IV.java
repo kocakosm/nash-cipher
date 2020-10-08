@@ -82,7 +82,6 @@ public final class IV implements Serializable
 		if (!(o instanceof IV)) {
 			return false;
 		}
-		final IV iv = (IV) o;
-		return Arrays.equals(bits, iv.bits);
+		return Arrays.equals(bits, ((IV) o).bits);
 	}
 }

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.function.Executable;
 public final class IVTest
 {
 	@Test
-	public void testConstructor()
+	public void testCreate()
 	{
 		IV iv = IV.create(32);
 		assertEquals(32, iv.getSize());
@@ -32,7 +32,7 @@ public final class IVTest
 	}
 
 	@Test
-	public void testConstructorWithNegativeSize()
+	public void testCreateWithNegativeSize()
 	{
 		Executable toTest = () -> IV.create(-1);
 		assertThrows(IllegalArgumentException.class, toTest);
@@ -50,10 +50,10 @@ public final class IVTest
 	}
 
 	@Test
-	public void testSerialization() throws Exception
+	public void testSerializationDeserializationRoundTrip() throws Exception
 	{
 		IV iv = IV.create(32);
-		IV decoded = ObjectCodec.decode(ObjectCodec.encode(iv), IV.class);
+		IV decoded = Codec.decode(Codec.encode(iv), IV.class);
 		assertNotSame(iv, decoded);
 		assertEquals(iv, decoded);
 	}

@@ -13,7 +13,6 @@ package org.kocakosm.nash;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,45 +23,30 @@ import java.io.Serializable;
  *
  * @author Osman Koçak
  */
-final class ObjectCodec
+final class Codec
 {
 	static byte[] encode(Serializable object) throws IOException
 	{
-		ObjectOutputStream oos = null;
-		try {
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			oos = new ObjectOutputStream(out);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
 			oos.writeObject(object);
 			oos.flush();
-			return out.toByteArray();
-		} finally {
-			close(oos);
 		}
+		return out.toByteArray();
 	}
 
 	static <T extends Serializable> T decode(byte[] object, Class<T> t)
 		throws IOException
 	{
-		ObjectInputStream ois = null;
 		ByteArrayInputStream in = new ByteArrayInputStream(object);
-		try {
-			ois = new ObjectInputStream(in);
+		try (ObjectInputStream ois = new ObjectInputStream(in)) {
 			return t.cast(ois.readObject());
 		} catch (ClassNotFoundException ex) {
 			throw new IOException(ex);
-		} finally {
-			close(ois);
 		}
 	}
 
-	private static void close(Closeable stream) throws IOException
-	{
-		if (stream != null) {
-			stream.close();
-		}
-	}
-
-	private ObjectCodec()
+	private Codec()
 	{
 		/* ... */
 	}

@@ -14,10 +14,12 @@ package org.kocakosm.nash.io;
 import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
 import org.kocakosm.nash.NashCipher;
+import org.kocakosm.nash.NashCipher.Mode;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Objects;
 
 /**
  * A {@code NashCipherOutputStream} is composed of an inner {@link OutputStream}
@@ -46,10 +48,8 @@ public final class NashCipherOutputStream extends OutputStream
 	 */
 	public NashCipherOutputStream(Key key, IV iv, OutputStream encrypted)
 	{
-		if (encrypted == null) {
-			throw new NullPointerException();
-		}
-		this.cipher = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
+		Objects.requireNonNull(encrypted);
+		this.cipher = new NashCipher(key, iv, Mode.ENCRYPTION);
 		this.encrypted = new BufferedOutputStream(encrypted);
 	}
 

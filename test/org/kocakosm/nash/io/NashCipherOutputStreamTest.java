@@ -19,9 +19,11 @@ import static org.mockito.Mockito.verify;
 import org.kocakosm.nash.IV;
 import org.kocakosm.nash.Key;
 import org.kocakosm.nash.NashCipher;
+import org.kocakosm.nash.NashCipher.Mode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.function.Executable;
@@ -62,26 +64,26 @@ public final class NashCipherOutputStreamTest
 	@Test
 	public void testWrite() throws Exception
 	{
-		byte[] data = "Hello".getBytes("UTF-8");
+		byte[] data = "Hello".getBytes(StandardCharsets.UTF_8);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		OutputStream nash = new NashCipherOutputStream(key, iv, out);
 		for (byte b : data) {
 			nash.write(b);
 		}
 		nash.flush();
-		NashCipher cipher = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
+		NashCipher cipher = new NashCipher(key, iv, Mode.ENCRYPTION);
 		assertArrayEquals(cipher.process(data), out.toByteArray());
 	}
 
 	@Test
 	public void testWriteArray() throws Exception
 	{
-		byte[] data = "Hello".getBytes("UTF-8");
+		byte[] data = "Hello".getBytes(StandardCharsets.UTF_8);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		OutputStream nash = new NashCipherOutputStream(key, iv, out);
 		nash.write(data);
 		nash.flush();
-		NashCipher cipher = new NashCipher(key, iv, NashCipher.Mode.ENCRYPTION);
+		NashCipher cipher = new NashCipher(key, iv, Mode.ENCRYPTION);
 		assertArrayEquals(cipher.process(data), out.toByteArray());
 	}
 }

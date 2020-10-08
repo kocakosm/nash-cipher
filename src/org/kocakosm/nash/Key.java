@@ -121,7 +121,7 @@ public final class Key implements Serializable
 		if (!(o instanceof Key)) {
 			return false;
 		}
-		final Key k = (Key) o;
+		Key k = (Key) o;
 		return Arrays.equals(redBits, k.redBits)
 			&& Arrays.equals(blueBits, k.blueBits)
 			&& Arrays.equals(redPermutations, k.redPermutations)
